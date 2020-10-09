@@ -1,4 +1,5 @@
 const uuid = require('uuid');
+const R = require('ramda');
 
 class User {
   constructor({
@@ -14,8 +15,11 @@ class User {
   }
 
   static toResponse(user) {
-    const { id, name, login } = user;
-    return { id, name, login };
+    return {
+      id: R.prop('id', user),
+      name: R.prop('name', user),
+      login: R.prop('login', user)
+    };
   }
 }
 
