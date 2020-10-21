@@ -1,13 +1,13 @@
-const usersRepo = require('./user.memory.repository');
+const usersMongoRepo = require('./user.mongo.repository');
 
-const getAll = () => usersRepo.getAll();
+const getAll = () => usersMongoRepo.getAll();
 
-const getById = payload => usersRepo.getById(payload);
+const getById = payload => usersMongoRepo.getById(payload);
 
-const create = payload => usersRepo.insertOne(payload);
+const create = payload => usersMongoRepo.insertOne(payload);
 
-const updateOne = payload => usersRepo.updateOne(payload);
+const updateOne = payload => usersMongoRepo.updateOne(payload);
 
-const deleteOne = payload => usersRepo.deleteOne(payload);
+const deleteOne = payload => usersMongoRepo.deleteOne(payload);
 
 module.exports = { getAll, getById, create, updateOne, deleteOne };

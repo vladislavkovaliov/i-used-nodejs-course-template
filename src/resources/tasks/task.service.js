@@ -1,19 +1,21 @@
-const tasksRepo = require('./task.memory.repository');
+const tasksMongoRepo = require('./task.mongo.repository');
 
-const getAll = boardId => tasksRepo.getAll(boardId);
+const getAll = boardId => tasksMongoRepo.getAll(boardId);
 
-const getById = (boardId, taskId) => tasksRepo.getById(boardId, taskId);
+const getById = (boardId, taskId) => tasksMongoRepo.getById(boardId, taskId);
 
-const create = payload => tasksRepo.insertOne(payload);
+const create = payload => tasksMongoRepo.insertOne(payload);
 
-const updateOne = payload => tasksRepo.updateOne(payload);
+const updateOne = payload => tasksMongoRepo.updateOne(payload);
 
-const deleteOne = (boardId, taskId) => tasksRepo.deleteOne(boardId, taskId);
+const deleteOne = (boardId, taskId) =>
+  tasksMongoRepo.deleteOne(boardId, taskId);
 
-const deleteAllTasksByBoarId = payload => tasksRepo.deleteByBoardId(payload);
+const deleteAllTasksByBoarId = payload =>
+  tasksMongoRepo.deleteByBoardId(payload);
 
 const removeUserFromTasksByUserId = payload =>
-  tasksRepo.removeUserFromTasksByUserId(payload);
+  tasksMongoRepo.removeUserFromTasksByUserId(payload);
 
 module.exports = {
   getAll,
