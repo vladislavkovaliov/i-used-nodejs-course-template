@@ -15,7 +15,7 @@ const insertOne = async payload => {
     const user = await User.create({
       name: R.prop('name', payload),
       login: R.prop('login', payload),
-      password: R.prop('password', payload)
+      password: await User.saltPassword(R.prop('password', payload))
     });
 
     return user._doc;
@@ -68,4 +68,29 @@ const getById = async payload => {
   }
 };
 
-module.exports = { getAll, insertOne, deleteOne, updateOne, getById };
+const getLoginAndPassword = async payload => {
+  try {
+    const { login, password } = payload;
+    const p = await User.saltPassword(password);
+    console.log(p);
+    const user = await User.findOne({
+      login,
+      password: await User.saltPassword(password)
+    });
+    if (!user) {
+      return null;
+    }
+    return user._doc;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+module.exports = {
+  getAll,
+  insertOne,
+  deleteOne,
+  updateOne,
+  getById,
+  getLoginAndPassword
+};

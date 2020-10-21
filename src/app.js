@@ -8,10 +8,12 @@ const mongoose = require('mongoose');
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
 const taskRouter = require('./resources/tasks/task.router');
-const {
-  uncaughtExceptionLogger,
-  unhandledRejectionLogger
-} = require('./common/logger');
+const authRouter = require('./resources/auth/auth.router');
+const authJWT = require('./middlewares/auth');
+// const {
+//   uncaughtExceptionLogger,
+//   unhandledRejectionLogger
+// } = require('./common/logger');
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
@@ -47,9 +49,10 @@ app.use('/', (req, res, next) => {
   }
   next();
 });
-app.use('/users', userRouter);
-app.use('/boards', boardRouter);
-app.use('/boards', taskRouter);
+app.use(authRouter);
+app.use('/users', authJWT, userRouter);
+app.use('/boards', authJWT, boardRouter);
+app.use('/boards', authJWT, taskRouter);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
@@ -66,13 +69,13 @@ app.use((err, req, res, next) => {
 // setTimeout(() => {
 //   Promise.reject(Error('Oops!'));
 // }, 4000);
-
-process.on('uncaughtException', err => {
-  uncaughtExceptionLogger.error(err.message);
-});
-
-process.on('unhandledRejection', err => {
-  unhandledRejectionLogger.error(err.message);
-});
+//
+// process.on('uncaughtException', err => {
+//   uncaughtExceptionLogger.error(err.message);
+// });
+//
+// process.on('unhandledRejection', err => {
+//   unhandledRejectionLogger.error(err.message);
+// });
 
 module.exports = app;
