@@ -4,6 +4,7 @@ const path = require('path');
 const YAML = require('yamljs');
 const morgan = require('morgan');
 const morganBody = require('morgan-body');
+const mongoose = require('mongoose');
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
 const taskRouter = require('./resources/tasks/task.router');
@@ -14,6 +15,24 @@ const {
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
+mongoose.Promise = Promise;
+
+mongoose
+  .connect(process.env.MONGO_CONNECTION_STRING, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true
+  })
+  .then(() => {
+    /** ready to use. The `mongoose.connect()` promise resolves to undefined. */
+  })
+  .catch(err => {
+    console.log(
+      `MongoDB connection error. Please make sure MongoDB is running. ${err}`
+    );
+    // process.exit();
+  });
 
 app.use(express.json());
 app.use(
